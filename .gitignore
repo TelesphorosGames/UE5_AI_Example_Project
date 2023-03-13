@@ -1,0 +1,28 @@
+# Ignore all files by default, but scan all directories.
+*
+!*/
+
+# Do not ignore git files in the root of the repo.
+!/.git*
+
+# Do not ignore current project's `.uproject`.
+!/*.uproject
+
+# Do not ignore source, config and plugins dirs.
+!/Source/**
+!/Config/**
+!/Plugins/**
+
+# Except Do Ignore these specific folders
+/Plugins/Developer/RiderLink/**
+
+# Only allow .uasset and .umap files from /Content/VersionControlled directory.
+# They're tracked by git-lfs, don't forget to track other
+# files if adding them here.
+!/Content/VersionControlled/**/*.uasset
+!/Content/VersionControlled/**/*.umap
+
+# Allow any files from /RawContent dir. ( N/A )
+# Any file in /RawContent dir will be managed by git lfs.
+!/RawContent/**/*
+
