@@ -13,6 +13,9 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Components/SphereComponent.h"
+#include "HUD/PlayerHUD.h"
+#include "Interfaces/Interactable.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 AAI_ExampleProjectCharacter::AAI_ExampleProjectCharacter()
@@ -48,8 +51,8 @@ AAI_ExampleProjectCharacter::AAI_ExampleProjectCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
-	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+	
+	
 }
 
 void AAI_ExampleProjectCharacter::BeginPlay()
@@ -64,10 +67,12 @@ void AAI_ExampleProjectCharacter::BeginPlay()
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
+		PlayerHUD = Cast<APlayerHUD>(PlayerController->GetHUD());
 	}
-
+	// Get reference to Game Mode
 	ExampleProjectGameMode = Cast<AAI_ExampleProjectGameMode>(GetWorld()->GetAuthGameMode());
 
+	
 	
 }
 
@@ -134,25 +139,21 @@ void AAI_ExampleProjectCharacter::Interact()
 	FHitResult OutHitResult;
 	TArray<AActor*> ActorsToIgnore;
 	UKismetSystemLibrary::SphereTraceSingle(GetWorld(), GetActorLocation(), GetActorLocation() + (FollowCamera->GetForwardVector() * 5'000), 25.f, ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForOneFrame, OutHitResult, false);
-
-	UE_LOG(LogTemp,Warning,TEXT("SphereTraceCalled!"));
+	
 	if(OutHitResult.bBlockingHit)
 	{
-		UE_LOG(LogTemp,Warning,TEXT("BlockingHit!"));
 		IInteractable* InteractableObject = Cast<IInteractable>(OutHitResult.GetActor());
 		if(InteractableObject)
 		{
-			UE_LOG(LogTemp,Warning,TEXT("Success!"));
-			UE_LOG(LogTemp,Warning,TEXT("%s"), *OutHitResult.GetActor()->GetName());
+			UE_LOG(LogTemp,Warning,TEXT("Success, interacting with : %s"), *OutHitResult.GetActor()->GetName());
+			InteractableObject->InteractWith(this);
 		}
 		else
 		{
-			UE_LOG(LogTemp,Warning,TEXT("Fail!"));
-			UE_LOG(LogTemp,Warning,TEXT("%s"), *OutHitResult.GetActor()->GetName());
+			UE_LOG(LogTemp,Warning,TEXT("Failure. %s is not interactable!"), *OutHitResult.GetActor()->GetName());
 		}
 	}
 }
-
 
 
 

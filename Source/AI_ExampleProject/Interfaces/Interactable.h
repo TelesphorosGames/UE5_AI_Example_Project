@@ -22,7 +22,14 @@ class AI_EXAMPLEPROJECT_API IInteractable
 	GENERATED_BODY()
 
 public:
+
 	
 	virtual void InteractWith(AActor* ActorToInteractWith);
+
+	virtual bool GetIsInteractable();
+	virtual void SetIsInteractable(bool bSetIsInteractableTo);
+
+	bool bIsInteractable = false;
+
 	
 };

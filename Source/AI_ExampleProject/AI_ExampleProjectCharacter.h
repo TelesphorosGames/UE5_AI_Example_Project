@@ -5,17 +5,24 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
-#include "Interfaces/Interactable.h"
 #include "AI_ExampleProjectCharacter.generated.h"
 
 
+class USphereComponent;
 class AAI_ExampleProjectGameMode;
+
+// BASE PLAYER CLASS - CANNOT BE INTERACTED WITH BY DEFAULT - CAN ONLY INTERACT
 UCLASS(config=Game)
-class AAI_ExampleProjectCharacter : public ACharacter, public IInteractable
+class AAI_ExampleProjectCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-public:
+/* UNREAL ENGINE BASE CHARACTER SETUP */
+/*************************************
+ *
+ */
+	
+	public:
 	AAI_ExampleProjectCharacter();
 
 
@@ -24,8 +31,7 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 	
-
-protected:
+	protected:
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -40,11 +46,7 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
-	void Interact();
-		
-
 private:
-	
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
@@ -68,13 +70,27 @@ private:
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
+	
+/*******************************************//*///////*/
+/* END UNREAL ENGINE BASE CHARACTER SETUP */
+	
 
+protected:
+	
+	void Interact();
+	
+private:
+
+	
 	/** Interact Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* InteractAction;
 
-	TObjectPtr<AAI_ExampleProjectGameMode> ExampleProjectGameMode;
+	// Game Mode
+	TObjectPtr<class AAI_ExampleProjectGameMode> ExampleProjectGameMode;
 
+	// Player HUD
+	TObjectPtr<class APlayerHUD> PlayerHUD;
 
 };
 
