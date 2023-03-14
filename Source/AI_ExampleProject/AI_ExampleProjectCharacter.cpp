@@ -1,6 +1,10 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+
+
+
 
 #include "AI_ExampleProjectCharacter.h"
+
+#include "AI_ExampleProjectGameMode.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
@@ -9,10 +13,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-
-
-//////////////////////////////////////////////////////////////////////////
-// AAI_ExampleProjectCharacter
+#include "Kismet/KismetSystemLibrary.h"
 
 AAI_ExampleProjectCharacter::AAI_ExampleProjectCharacter()
 {
@@ -64,25 +65,29 @@ void AAI_ExampleProjectCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
-}
 
-//////////////////////////////////////////////////////////////////////////
-// Input
+	ExampleProjectGameMode = Cast<AAI_ExampleProjectGameMode>(GetWorld()->GetAuthGameMode());
+
+	
+}
 
 void AAI_ExampleProjectCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
-		//Jumping
+		// Jumping
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
-		//Moving
+		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAI_ExampleProjectCharacter::Move);
 
-		//Looking
+		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AAI_ExampleProjectCharacter::Look);
+
+		// Interaction
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AAI_ExampleProjectCharacter::Interact);
 
 	}
 
@@ -95,17 +100,17 @@ void AAI_ExampleProjectCharacter::Move(const FInputActionValue& Value)
 
 	if (Controller != nullptr)
 	{
-		// find out which way is forward
+		// Controller's Forward Yaw Direction
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-		// get forward vector
+		// Forward Vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	
-		// get right vector 
+		// Right Vector
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-		// add movement 
+		// Movement
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
 	}
@@ -122,6 +127,13 @@ void AAI_ExampleProjectCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AAI_ExampleProjectCharacter::Interact()
+{
+	FHitResult OutHitResult;
+	
+	UKismetSystemLibrary::SphereTraceSingle(GetWorld(), GetActorLocation(), GetActorLocation() + (FollowCamera->GetForwardVector() * 5'000), 5.f, ETraceTypeQuery::TraceTypeQuery1, false, TArray<AActor*>(), EDrawDebugTrace::ForOneFrame, OutHitResult, true);
 }
 
 
