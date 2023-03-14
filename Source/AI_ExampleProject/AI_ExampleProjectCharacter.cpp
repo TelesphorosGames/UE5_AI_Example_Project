@@ -132,8 +132,25 @@ void AAI_ExampleProjectCharacter::Look(const FInputActionValue& Value)
 void AAI_ExampleProjectCharacter::Interact()
 {
 	FHitResult OutHitResult;
-	
-	UKismetSystemLibrary::SphereTraceSingle(GetWorld(), GetActorLocation(), GetActorLocation() + (FollowCamera->GetForwardVector() * 5'000), 5.f, ETraceTypeQuery::TraceTypeQuery1, false, TArray<AActor*>(), EDrawDebugTrace::ForOneFrame, OutHitResult, true);
+	TArray<AActor*> ActorsToIgnore;
+	UKismetSystemLibrary::SphereTraceSingle(GetWorld(), GetActorLocation(), GetActorLocation() + (FollowCamera->GetForwardVector() * 5'000), 25.f, ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForOneFrame, OutHitResult, false);
+
+	UE_LOG(LogTemp,Warning,TEXT("SphereTraceCalled!"));
+	if(OutHitResult.bBlockingHit)
+	{
+		UE_LOG(LogTemp,Warning,TEXT("BlockingHit!"));
+		IInteractable* InteractableObject = Cast<IInteractable>(OutHitResult.GetActor());
+		if(InteractableObject)
+		{
+			UE_LOG(LogTemp,Warning,TEXT("Success!"));
+			UE_LOG(LogTemp,Warning,TEXT("%s"), *OutHitResult.GetActor()->GetName());
+		}
+		else
+		{
+			UE_LOG(LogTemp,Warning,TEXT("Fail!"));
+			UE_LOG(LogTemp,Warning,TEXT("%s"), *OutHitResult.GetActor()->GetName());
+		}
+	}
 }
 
 
