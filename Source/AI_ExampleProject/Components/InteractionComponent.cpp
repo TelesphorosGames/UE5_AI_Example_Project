@@ -4,6 +4,7 @@
 #include "InteractionComponent.h"
 
 #include "Components/SphereComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 
 UInteractionComponent::UInteractionComponent()
@@ -12,13 +13,37 @@ UInteractionComponent::UInteractionComponent()
 
 	// Create the Interactable Range Sphere
 	InteractableRangeSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Interactable Range Sphere"));
-	InteractableRangeSphere->SetupAttachment(GetOwner()->GetRootComponent());
+	
 	InteractableRangeSphere->SetSphereRadius(800.f);
+}
+
+void UInteractionComponent::Interact()
+{
+	FHitResult OutHitResult;
+	TArray<AActor*> ActorsToIgnore;
+	UKismetSystemLibrary::SphereTraceSingle(GetWorld(), GetOwner()->GetActorLocation(), GetOwner()->GetActorLocation() + (GetOwner()->GetInstigatorController()->GetControlRotation().Vector() * 5'000), 25.f, ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForOneFrame, OutHitResult, false);
+	
+	if(OutHitResult.bBlockingHit)
+	{
+		IInteractable* InteractableObject = Cast<IInteractable>(OutHitResult.GetActor());
+		if(InteractableObject && InteractableObject->GetIsInteractable())
+		{
+			UE_LOG(LogTemp,Warning,TEXT("Success, interacting with : %s"), *OutHitResult.GetActor()->GetName());
+			InteractableObject->InteractWith(GetOwner());
+		}
+		else
+		{
+			UE_LOG(LogTemp,Warning,TEXT("Failure. %s is not interactable!"), *OutHitResult.GetActor()->GetName());
+		}
+	}
 }
 
 void UInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	
+	InteractableRangeSphere->AttachToComponent(GetOwner()->GetRootComponent(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	
 	// Bind Overlap Functions to Interactable Sphere
 	InteractableRangeSphere->OnComponentBeginOverlap.AddDynamic(this, &UInteractionComponent::InteractSphereOverlap);
@@ -36,6 +61,7 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 void UInteractionComponent::InteractSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	UE_LOG(LogTemp,Warning,TEXT("I AM TIRED"));
 	if(OtherActor)
 	{
 		IInteractable* PossibleInteractable = Cast<IInteractable>(OtherActor);

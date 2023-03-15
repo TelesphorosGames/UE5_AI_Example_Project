@@ -13,9 +13,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "Components/SphereComponent.h"
+#include "Components/InteractionComponent.h"
 #include "HUD/PlayerHUD.h"
-#include "Interfaces/Interactable.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 AAI_ExampleProjectCharacter::AAI_ExampleProjectCharacter()
@@ -50,8 +49,6 @@ AAI_ExampleProjectCharacter::AAI_ExampleProjectCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
-	
 	
 }
 
@@ -69,11 +66,12 @@ void AAI_ExampleProjectCharacter::BeginPlay()
 		}
 		PlayerHUD = Cast<APlayerHUD>(PlayerController->GetHUD());
 	}
-	// Get reference to Game Mode
+	// Get Pointer to Game Mode
 	ExampleProjectGameMode = Cast<AAI_ExampleProjectGameMode>(GetWorld()->GetAuthGameMode());
 
-	
-	
+	// Get Pointer to Interaction Component
+	InteractionComponent = Cast<UInteractionComponent>(GetComponentByClass(InteractionComponentClass));
+
 }
 
 void AAI_ExampleProjectCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -92,7 +90,7 @@ void AAI_ExampleProjectCharacter::SetupPlayerInputComponent(class UInputComponen
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AAI_ExampleProjectCharacter::Look);
 
 		// Interaction
-		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AAI_ExampleProjectCharacter::Interact);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AAI_ExampleProjectCharacter::InteractButtonPressed);
 
 	}
 
@@ -134,24 +132,11 @@ void AAI_ExampleProjectCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
-void AAI_ExampleProjectCharacter::Interact()
+void AAI_ExampleProjectCharacter::InteractButtonPressed()
 {
-	FHitResult OutHitResult;
-	TArray<AActor*> ActorsToIgnore;
-	UKismetSystemLibrary::SphereTraceSingle(GetWorld(), GetActorLocation(), GetActorLocation() + (FollowCamera->GetForwardVector() * 5'000), 25.f, ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForOneFrame, OutHitResult, false);
-	
-	if(OutHitResult.bBlockingHit)
+	if(InteractionComponent)
 	{
-		IInteractable* InteractableObject = Cast<IInteractable>(OutHitResult.GetActor());
-		if(InteractableObject)
-		{
-			UE_LOG(LogTemp,Warning,TEXT("Success, interacting with : %s"), *OutHitResult.GetActor()->GetName());
-			InteractableObject->InteractWith(this);
-		}
-		else
-		{
-			UE_LOG(LogTemp,Warning,TEXT("Failure. %s is not interactable!"), *OutHitResult.GetActor()->GetName());
-		}
+		InteractionComponent->Interact();
 	}
 }
 

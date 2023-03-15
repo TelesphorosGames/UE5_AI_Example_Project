@@ -8,6 +8,7 @@
 #include "AI_ExampleProjectCharacter.generated.h"
 
 
+class UInteractionComponent;
 class USphereComponent;
 class AAI_ExampleProjectGameMode;
 
@@ -77,7 +78,7 @@ private:
 
 protected:
 	
-	void Interact();
+	void InteractButtonPressed();
 	
 private:
 
@@ -91,6 +92,15 @@ private:
 
 	// Player HUD
 	TObjectPtr<class APlayerHUD> PlayerHUD;
+
+	/* Set This in BP to the Interaction Component class so we can find our BP version
+	 * Can avoid this with a direct Interaction Component Created in C++ */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UActorComponent> InteractionComponentClass;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInteractionComponent* InteractionComponent;
+
 
 };
 
