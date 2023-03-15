@@ -19,6 +19,9 @@ public:
 
 	void Interact();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString HighlightedInteractableName = "None";
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -26,6 +29,7 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	void ConstantInteractionCheck();
 
 private:
 	
@@ -45,7 +49,13 @@ private:
 	void InteractSphereEndOverlap( UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	
 	TObjectPtr<IInteractable> CurrentlyHighlightedInteractable;
+	TObjectPtr<IInteractable> PreviouslyHighlightedInteractable;
 
+
+	int32 NumberOfOverlappedInteractables = 0;
+
+	bool bShouldDoInteractionCheck = false;
+	
 	
 };
 

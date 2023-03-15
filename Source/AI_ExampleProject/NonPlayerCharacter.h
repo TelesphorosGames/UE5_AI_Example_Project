@@ -45,6 +45,7 @@ protected:
 	virtual bool GetIsInteractable() override;
 	virtual void SetIsInteractable(bool bSetIsInteractableTo) override;
 	virtual FString GetInteractableDisplayName() override;
+	
 private:
 
 	// Interact Widget - Set in Blueprint Default to the Interact Button

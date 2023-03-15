@@ -53,24 +53,64 @@ void UInteractionComponent::BeginPlay()
 }
 
 
+void UInteractionComponent::ConstantInteractionCheck()
+{
+	if(bShouldDoInteractionCheck)
+	{
+		FHitResult InteractionCheckHitResult;
+        	
+		UKismetSystemLibrary::LineTraceSingle(this, GetOwner()->GetActorLocation(), GetOwner()->GetActorLocation() + GetOwner()->GetInstigatorController()->GetControlRotation().Vector() * 1'000, ETraceTypeQuery::TraceTypeQuery1, false, TArray<AActor*>(), EDrawDebugTrace::ForOneFrame, InteractionCheckHitResult, true);
+		
+		if(InteractionCheckHitResult.GetActor() && InteractionCheckHitResult.GetActor()->Implements<UInteractable>())
+        {
+			if(PreviouslyHighlightedInteractable)
+			{
+				PreviouslyHighlightedInteractable->SetIsInteractable(false);
+			}
+			
+			CurrentlyHighlightedInteractable = Cast<IInteractable>(InteractionCheckHitResult.GetActor());
+			CurrentlyHighlightedInteractable->SetIsInteractable(true);
+			HighlightedInteractableName = CurrentlyHighlightedInteractable->GetInteractableDisplayName();
+			PreviouslyHighlightedInteractable = CurrentlyHighlightedInteractable;
+        }
+		else if(CurrentlyHighlightedInteractable != nullptr)
+		{
+			CurrentlyHighlightedInteractable->SetIsInteractable(false);
+			HighlightedInteractableName = "";
+		}		
+	}
+	else if(CurrentlyHighlightedInteractable)
+	{
+		CurrentlyHighlightedInteractable->SetIsInteractable(false);
+		HighlightedInteractableName = "";
+	}
+	else
+	{
+		HighlightedInteractableName = "";
+	}
+}
+
 void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	// Does Line Trace to 
+	ConstantInteractionCheck();
+	
+	
 
 }
 
 void UInteractionComponent::InteractSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp,Warning,TEXT("I AM TIRED"));
-	
 	if(OtherActor)
 	{
 		IInteractable* PossibleInteractable = Cast<IInteractable>(OtherActor);
 		if(PossibleInteractable)
 		{
-			PossibleInteractable->SetIsInteractable(true);
+			bShouldDoInteractionCheck=true;
+			NumberOfOverlappedInteractables += 1;
 		}
 	}
 }
@@ -83,7 +123,11 @@ void UInteractionComponent::InteractSphereEndOverlap(UPrimitiveComponent* Overla
 		IInteractable* PossibleInteractable = Cast<IInteractable>(OtherActor);
 		if(PossibleInteractable)
 		{
-			PossibleInteractable->SetIsInteractable(false);
+			NumberOfOverlappedInteractables -=1;
+			if(NumberOfOverlappedInteractables <=0)
+			{
+				bShouldDoInteractionCheck = false;
+			}
 		}
 	}
 }
