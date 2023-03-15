@@ -5,6 +5,7 @@
 
 #include "Blueprint/UserWidget.h"
 #include "Components/WidgetComponent.h"
+#include "HUD/UserWidgetNameplate.h"
 
 // Sets default values
 ANonPlayerCharacter::ANonPlayerCharacter()
@@ -14,12 +15,15 @@ ANonPlayerCharacter::ANonPlayerCharacter()
 
 	InteractWithWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("InteractWithWidget"));
 	InteractWithWidget->SetupAttachment(RootComponent);
+	
+	
 }
 
 // Called when the game starts or when spawned
 void ANonPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
 	
 }
 
@@ -46,6 +50,11 @@ void ANonPlayerCharacter::SetIsInteractable(bool bSetIsInteractableTo)
 	}
 	
 	
+}
+
+FString ANonPlayerCharacter::GetInteractableDisplayName()
+{
+	return NPC_Name;
 }
 
 // Called every frame

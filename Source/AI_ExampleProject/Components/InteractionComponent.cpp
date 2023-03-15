@@ -19,16 +19,18 @@ UInteractionComponent::UInteractionComponent()
 
 void UInteractionComponent::Interact()
 {
+	// 1. Do Sphere trace outwards from location of player character + control rotation (camera rotation)
 	FHitResult OutHitResult;
 	TArray<AActor*> ActorsToIgnore;
 	UKismetSystemLibrary::SphereTraceSingle(GetWorld(), GetOwner()->GetActorLocation(), GetOwner()->GetActorLocation() + (GetOwner()->GetInstigatorController()->GetControlRotation().Vector() * 5'000), 25.f, ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore, EDrawDebugTrace::ForOneFrame, OutHitResult, false);
-	
+
+	// 2. If blocking hit, check it for Interactable interface. If it Implements the interface and is currently interactable, interact
 	if(OutHitResult.bBlockingHit)
 	{
 		IInteractable* InteractableObject = Cast<IInteractable>(OutHitResult.GetActor());
 		if(InteractableObject && InteractableObject->GetIsInteractable())
 		{
-			UE_LOG(LogTemp,Warning,TEXT("Success, interacting with : %s"), *OutHitResult.GetActor()->GetName());
+			UE_LOG(LogTemp,Warning,TEXT("Success, interacting with : %s"), *InteractableObject->GetInteractableDisplayName());
 			InteractableObject->InteractWith(GetOwner());
 		}
 		else
@@ -62,6 +64,7 @@ void UInteractionComponent::InteractSphereOverlap(UPrimitiveComponent* Overlappe
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp,Warning,TEXT("I AM TIRED"));
+	
 	if(OtherActor)
 	{
 		IInteractable* PossibleInteractable = Cast<IInteractable>(OtherActor);

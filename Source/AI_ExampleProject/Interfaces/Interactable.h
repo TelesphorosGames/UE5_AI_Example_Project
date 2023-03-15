@@ -30,6 +30,8 @@ public:
 	virtual void SetIsInteractable(bool bSetIsInteractableTo);
 
 	bool bIsInteractable = false;
+	
+	virtual FString GetInteractableDisplayName();
 
 	
 };

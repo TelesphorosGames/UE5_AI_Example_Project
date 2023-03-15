@@ -43,6 +43,8 @@ private:
 	// Called When Interactable Range Sphere is no longer overlapping said Other Actor
 	UFUNCTION()
 	void InteractSphereEndOverlap( UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	
+	TObjectPtr<IInteractable> CurrentlyHighlightedInteractable;
 
 	
 };

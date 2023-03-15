@@ -21,3 +21,8 @@ void IInteractable::SetIsInteractable(bool bSetIsInteractableTo)
 {
 	bIsInteractable = bSetIsInteractableTo;
 }
+
+FString IInteractable::GetInteractableDisplayName()
+{
+	return "No Name Set";
+}

@@ -75,7 +75,10 @@ private:
 /*******************************************//*///////*/
 /* END UNREAL ENGINE BASE CHARACTER SETUP */
 	
-
+public:
+	UPROPERTY(VisibleAnywhere)
+	FString CurrentlyLookedAtInteractableName;
+	
 protected:
 	
 	void InteractButtonPressed();
@@ -100,6 +103,8 @@ private:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInteractionComponent* InteractionComponent;
+
+	
 
 
 };
