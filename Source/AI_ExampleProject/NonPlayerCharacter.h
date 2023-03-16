@@ -35,7 +35,7 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -45,7 +45,7 @@ protected:
 	virtual bool GetIsInteractable() override;
 	virtual void SetIsInteractable(bool bSetIsInteractableTo) override;
 	virtual FString GetInteractableDisplayName() override;
-	
+
 private:
 
 	// Interact Widget - Set in Blueprint Default to the Interact Button
@@ -57,5 +57,8 @@ private:
 	EInterestState InterestState;
 	UPROPERTY(EditAnywhere)
 	FString NPC_Name = "None";
+
+	
+	
 
 };

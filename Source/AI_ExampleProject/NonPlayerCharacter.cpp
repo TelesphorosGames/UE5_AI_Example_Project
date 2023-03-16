@@ -3,9 +3,9 @@
 
 #include "NonPlayerCharacter.h"
 
+#include "AI/ExampleAIController.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/WidgetComponent.h"
-#include "HUD/UserWidgetNameplate.h"
 
 // Sets default values
 ANonPlayerCharacter::ANonPlayerCharacter()
@@ -29,7 +29,11 @@ void ANonPlayerCharacter::BeginPlay()
 
 void ANonPlayerCharacter::InteractWith(AActor* ActorToInteractWith)
 {
-	
+	AExampleAIController* MyAIController = Cast<AExampleAIController>(GetController());
+	if(MyAIController)
+	{
+		MyAIController->StartDialogueTree();
+	}
 }
 
 bool ANonPlayerCharacter::GetIsInteractable()
@@ -48,8 +52,6 @@ void ANonPlayerCharacter::SetIsInteractable(bool bSetIsInteractableTo)
 	{
 		InteractWithWidget->SetVisibility(false);
 	}
-	
-	
 }
 
 FString ANonPlayerCharacter::GetInteractableDisplayName()
