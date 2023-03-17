@@ -24,7 +24,7 @@ class AI_EXAMPLEPROJECT_API IInteractable
 public:
 
 	
-	virtual void InteractWith(AActor* ActorToInteractWith);
+	virtual void InteractWith();
 
 	virtual bool GetIsInteractable();
 	virtual void SetIsInteractable(bool bSetIsInteractableTo);

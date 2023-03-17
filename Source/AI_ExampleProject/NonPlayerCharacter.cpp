@@ -27,7 +27,7 @@ void ANonPlayerCharacter::BeginPlay()
 	
 }
 
-void ANonPlayerCharacter::InteractWith(AActor* ActorToInteractWith)
+void ANonPlayerCharacter::InteractWith()
 {
 	AExampleAIController* MyAIController = Cast<AExampleAIController>(GetController());
 	if(MyAIController)

@@ -40,7 +40,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	virtual void InteractWith(AActor* ActorToInteractWith) override;
+	virtual void InteractWith() override;
 
 	virtual bool GetIsInteractable() override;
 	virtual void SetIsInteractable(bool bSetIsInteractableTo) override;
