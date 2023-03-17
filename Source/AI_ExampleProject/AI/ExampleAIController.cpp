@@ -3,6 +3,8 @@
 
 #include "ExampleAIController.h"
 
+#include "BrainComponent.h"
+
 void AExampleAIController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -12,4 +14,11 @@ void AExampleAIController::BeginPlay()
 void AExampleAIController::StartDialogueTree()
 {
 	RunBehaviorTree(DialogueTree);
+}
+
+void AExampleAIController::EndDialogue()
+{
+	// BrainComponent->StopLogic("");
+	RunBehaviorTree(CurrentBehaviorTree);
+	
 }

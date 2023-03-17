@@ -31,7 +31,7 @@ void UInteractionComponent::Interact()
 		if(InteractableObject && InteractableObject->GetIsInteractable())
 		{
 			UE_LOG(LogTemp,Warning,TEXT("Success, interacting with : %s"), *InteractableObject->GetInteractableDisplayName());
-			InteractableObject->InteractWith(GetOwner());
+			InteractableObject->InteractWith();
 		}
 		else
 		{

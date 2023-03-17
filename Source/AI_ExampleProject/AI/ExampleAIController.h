@@ -17,18 +17,23 @@ public:
 	
 	void StartDialogueTree();
 
+	UFUNCTION(BlueprintCallable)
+	void EndDialogue();
+	
+
 	void SetDialogueTree(UBehaviorTree* TreeToSetTo) { DialogueTree = TreeToSetTo ;}
 
 	
 protected:
 
 	virtual void BeginPlay() override;
-
-	
 	
 private:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="true"))
 	TObjectPtr<class UBehaviorTree> DialogueTree;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="true"))
+	TObjectPtr<class UBehaviorTree> CurrentBehaviorTree;
+
 };
