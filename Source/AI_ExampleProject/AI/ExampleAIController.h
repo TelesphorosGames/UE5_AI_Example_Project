@@ -23,6 +23,13 @@ public:
 
 	void SetDialogueTree(UBehaviorTree* TreeToSetTo) { DialogueTree = TreeToSetTo ;}
 
+	UBehaviorTree* GetCurrentBehaviorTree() const {return CurrentBehaviorTree;}
+	UBehaviorTree* GetNotInterestedBehaviorTree() const {return NotInterestedBehaviorTree;}
+	UBehaviorTree* GetSearchingForPlayerBehaviorTree() const {return CurrentBehaviorTree;}
+	UBehaviorTree* GetDialogueBehaviorTree() const {return DialogueTree;}
+	UBehaviorTree* GetFleeingPlayerBehaviorTree() const {return FleeingBehaviorTree;}
+	UBehaviorTree* GetEngagingPlayerBehaviorTree() const {return EngagingBehaviorTree;}
+
 	
 protected:
 
@@ -35,5 +42,20 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="true"))
 	TObjectPtr<class UBehaviorTree> CurrentBehaviorTree;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="true"))
+	TObjectPtr<class UBehaviorTree> NotInterestedBehaviorTree;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="true"))
+	TObjectPtr<class UBehaviorTree> SearchingForPlayerBehaviorTree;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="true"))
+	TObjectPtr<class UBehaviorTree> BehaviorTree;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="true"))
+	TObjectPtr<class UBehaviorTree> EngagingBehaviorTree;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="true"))
+	TObjectPtr<class UBehaviorTree> FleeingBehaviorTree;
 
 };

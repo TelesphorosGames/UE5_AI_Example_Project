@@ -36,6 +36,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION()
+	void SetInterestState(const EInterestState StateToSet);
+
+
+
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -55,9 +61,10 @@ private:
 	TObjectPtr<class UWidgetComponent> InteractWithWidget;
 	UPROPERTY(VisibleAnywhere)
 	EInterestState InterestState;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
 	FString NPC_Name = "None";
 
+	TObjectPtr<class AExampleAIController> ExampleAIController;
 	
 	
 

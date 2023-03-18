@@ -15,6 +15,8 @@ ANonPlayerCharacter::ANonPlayerCharacter()
 
 	InteractWithWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("InteractWithWidget"));
 	InteractWithWidget->SetupAttachment(RootComponent);
+
+
 	
 	
 }
@@ -23,17 +25,15 @@ ANonPlayerCharacter::ANonPlayerCharacter()
 void ANonPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	ExampleAIController = Cast<AExampleAIController>(GetController());
 
 	
 }
 
 void ANonPlayerCharacter::InteractWith()
 {
-	AExampleAIController* MyAIController = Cast<AExampleAIController>(GetController());
-	if(MyAIController)
-	{
-		MyAIController->StartDialogueTree();
-	}
+	ExampleAIController->StartDialogueTree();
 }
 
 bool ANonPlayerCharacter::GetIsInteractable()
@@ -71,5 +71,31 @@ void ANonPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void ANonPlayerCharacter::SetInterestState(const EInterestState StateToSet)
+{
+	InterestState = StateToSet;
+
+	switch (InterestState) { case EInterestState::EIS_NotInterested:
+		ExampleAIController->RunBehaviorTree(ExampleAIController->GetNotInterestedBehaviorTree());
+		break;
+	case EInterestState::EIS_SearchingForPlayer:
+		ExampleAIController->RunBehaviorTree(ExampleAIController->GetSearchingForPlayerBehaviorTree());
+		break;
+	case EInterestState::EIS_TalkingWithPlayer:
+		ExampleAIController->RunBehaviorTree(ExampleAIController->GetDialogueBehaviorTree());
+		break;
+	case EInterestState::EIS_EngagingPlayer:
+		ExampleAIController->RunBehaviorTree(ExampleAIController->GetEngagingPlayerBehaviorTree());
+		break;
+	case EInterestState::EIS_FleeingPlayer:
+		ExampleAIController->RunBehaviorTree(ExampleAIController->GetFleeingPlayerBehaviorTree());
+		break;
+	case EInterestState::EIS_MAX:
+		ExampleAIController->RunBehaviorTree(ExampleAIController->GetCurrentBehaviorTree());
+		break;
+	default: ;
+	}
 }
 
