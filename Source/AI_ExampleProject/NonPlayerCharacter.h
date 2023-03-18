@@ -39,8 +39,11 @@ public:
 	UFUNCTION()
 	void SetInterestState(const EInterestState StateToSet);
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true"))
+	FVector PatrolPoint1;
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true"))
+	FVector PatrolPoint2;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -66,6 +69,7 @@ private:
 
 	TObjectPtr<class AExampleAIController> ExampleAIController;
 	
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
+	bool bShouldPatrol = true;
 
 };

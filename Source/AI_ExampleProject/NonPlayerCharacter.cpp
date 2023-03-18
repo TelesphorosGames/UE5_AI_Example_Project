@@ -28,6 +28,7 @@ void ANonPlayerCharacter::BeginPlay()
 	
 	ExampleAIController = Cast<AExampleAIController>(GetController());
 
+	ExampleAIController->RunBehaviorTree(ExampleAIController->GetCurrentBehaviorTree());
 	
 }
 
