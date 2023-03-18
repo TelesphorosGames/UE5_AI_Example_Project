@@ -14,6 +14,8 @@ class AI_EXAMPLEPROJECT_API AExampleAIController : public AAIController
 {
 	GENERATED_BODY()
 public:
+
+	AExampleAIController();
 	
 	void StartDialogueTree();
 
@@ -36,6 +38,9 @@ protected:
 	virtual void BeginPlay() override;
 	
 private:
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess="true"))
+	TObjectPtr<class UAIPerceptionComponent> MyPerceptionComponent;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="true"))
 	TObjectPtr<class UBehaviorTree> DialogueTree;
