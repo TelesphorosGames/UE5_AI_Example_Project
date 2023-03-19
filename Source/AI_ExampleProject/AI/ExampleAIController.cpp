@@ -11,6 +11,7 @@ void AExampleAIController::BeginPlay()
 	Super::BeginPlay();
 	PerceptionComponent = MyPerceptionComponent;
 	
+	
 }
 
 AExampleAIController::AExampleAIController()

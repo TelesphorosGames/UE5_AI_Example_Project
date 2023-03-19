@@ -36,8 +36,11 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SetInterestState(const EInterestState StateToSet);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	EInterestState GetInterestState() const {return  InterestState;}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true"))
 	FVector PatrolPoint1;
