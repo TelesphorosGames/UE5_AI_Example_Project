@@ -21,8 +21,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void EndDialogue();
-	
 
+	
+	void SetCurrentBehaviorTree(UBehaviorTree* TreeToSetTo){CurrentBehaviorTree = TreeToSetTo; } 
 	void SetDialogueTree(UBehaviorTree* TreeToSetTo) { DialogueTree = TreeToSetTo ;}
 
 	UBehaviorTree* GetCurrentBehaviorTree() const {return CurrentBehaviorTree;}

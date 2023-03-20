@@ -27,7 +27,5 @@ void AExampleAIController::StartDialogueTree()
 
 void AExampleAIController::EndDialogue()
 {
-	// BrainComponent->StopLogic("");
 	RunBehaviorTree(CurrentBehaviorTree);
-	
 }

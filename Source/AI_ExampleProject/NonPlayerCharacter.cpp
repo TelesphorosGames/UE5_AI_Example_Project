@@ -79,22 +79,29 @@ void ANonPlayerCharacter::SetInterestState(const EInterestState StateToSet)
 	InterestState = StateToSet;
 
 	switch (InterestState) { case EInterestState::EIS_NotInterested:
-		ExampleAIController->RunBehaviorTree(ExampleAIController->GetNotInterestedBehaviorTree());
+
+		ExampleAIController->SetCurrentBehaviorTree(ExampleAIController->GetNotInterestedBehaviorTree());
 		break;
 	case EInterestState::EIS_SearchingForPlayer:
-		ExampleAIController->RunBehaviorTree(ExampleAIController->GetSearchingForPlayerBehaviorTree());
+
+		ExampleAIController->SetCurrentBehaviorTree(ExampleAIController->GetSearchingForPlayerBehaviorTree());
 		break;
 	case EInterestState::EIS_TalkingWithPlayer:
-		ExampleAIController->RunBehaviorTree(ExampleAIController->GetDialogueBehaviorTree());
+
+		ExampleAIController->SetCurrentBehaviorTree(ExampleAIController->GetDialogueBehaviorTree());
+		
 		break;
 	case EInterestState::EIS_EngagingPlayer:
-		ExampleAIController->RunBehaviorTree(ExampleAIController->GetEngagingPlayerBehaviorTree());
+
+		ExampleAIController->SetCurrentBehaviorTree(ExampleAIController->GetEngagingPlayerBehaviorTree());
 		break;
+		
 	case EInterestState::EIS_FleeingPlayer:
-		ExampleAIController->RunBehaviorTree(ExampleAIController->GetFleeingPlayerBehaviorTree());
+
+		ExampleAIController->SetCurrentBehaviorTree(ExampleAIController->GetFleeingPlayerBehaviorTree());
 		break;
+		
 	case EInterestState::EIS_MAX:
-		ExampleAIController->RunBehaviorTree(ExampleAIController->GetCurrentBehaviorTree());
 		break;
 	default: ;
 	}
