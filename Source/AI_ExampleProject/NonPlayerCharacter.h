@@ -35,16 +35,18 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	
+	// Can be called to set Interest State to dictate the NPC's next behavior tree.
 	UFUNCTION(BlueprintCallable)
 	void SetInterestState(const EInterestState StateToSet);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	EInterestState GetInterestState() const {return  InterestState;}
 
+	// Point where AI will patrol to - to be set via widget in editor
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true"))
 	FVector PatrolPoint1;
-
+	// Point where AI will patrol to - to be set via widget in editor
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget = "true"))
 	FVector PatrolPoint2;
 	
@@ -56,22 +58,27 @@ protected:
 
 	virtual bool GetIsInteractable() override;
 	virtual void SetIsInteractable(bool bSetIsInteractableTo) override;
+	
 	virtual FString GetInteractableDisplayName() override;
 
 private:
 
-	// Interact Widget - Set in Blueprint Default to the Interact Button
+	// Interact Widget - Set in Default Blueprint to the Interact Button to ensure it is created correctly
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UUserWidget> InteractWidgetClass;
+	// Pointer to the actual InteractWith Widget component 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<class UWidgetComponent> InteractWithWidget;
+	// Can be set to dictate the NPC's next behavior tree.
 	UPROPERTY(VisibleAnywhere)
 	EInterestState InterestState;
+	// Name of NPC, can be set in editor and will display as HUD's interactable && Dialogue widget's speaker name
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
 	FString NPC_Name = "None";
 
 	TObjectPtr<class AExampleAIController> ExampleAIController;
-	
+
+	// TODO : Implement simple bShouldPatrol toggle
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
 	bool bShouldPatrol = true;
 

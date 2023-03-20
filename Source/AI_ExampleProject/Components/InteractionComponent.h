@@ -29,7 +29,9 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-	
+
+	//TODO : Put on timer
+	// Currently is run in the Tick function
 	void ConstantInteractionCheck();
 
 private:
@@ -52,9 +54,10 @@ private:
 	TObjectPtr<IInteractable> CurrentlyHighlightedInteractable;
 	TObjectPtr<IInteractable> PreviouslyHighlightedInteractable;
 
-
+	// Keeps track of how many interactables we're overlapping with to ensure bShouldDoInteracionCheck is not toggled off early
 	int32 NumberOfOverlappedInteractables = 0;
 
+	// Only true when our character's interaction component is overlapping with an interactable object
 	bool bShouldDoInteractionCheck = false;
 	
 	

@@ -76,11 +76,13 @@ private:
 /* END UNREAL ENGINE BASE CHARACTER SETUP */
 	
 public:
+	// Holds the name of the interactable being hit by our line trace
 	UPROPERTY(VisibleAnywhere)
 	FString CurrentlyLookedAtInteractableName;
 	
 protected:
 	
+	// Calls the interaction component's Interact()
 	void InteractButtonPressed();
 	
 private:

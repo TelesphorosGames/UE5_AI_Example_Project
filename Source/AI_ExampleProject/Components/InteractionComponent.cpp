@@ -58,29 +58,38 @@ void UInteractionComponent::ConstantInteractionCheck()
 	if(bShouldDoInteractionCheck)
 	{
 		FHitResult InteractionCheckHitResult;
-        	
+
+		// If we are overlapping with an interactable, do a line trace to see if we are looking at an interactable
 		UKismetSystemLibrary::LineTraceSingle(this, GetOwner()->GetActorLocation(), GetOwner()->GetActorLocation() + GetOwner()->GetInstigatorController()->GetControlRotation().Vector() * 1'000, ETraceTypeQuery::TraceTypeQuery1, false, TArray<AActor*>(), EDrawDebugTrace::ForOneFrame, InteractionCheckHitResult, true);
-		
+
+		// See if the hit result's actor implements the Interactable interface
 		if(InteractionCheckHitResult.GetActor() && InteractionCheckHitResult.GetActor()->Implements<UInteractable>())
         {
+			// If we were already looking at an interactable, toggle it's interactability to off
 			if(PreviouslyHighlightedInteractable)
 			{
 				PreviouslyHighlightedInteractable->SetIsInteractable(false);
 			}
-			
+
+			// Set our currently highlighted (looked at) interactable and toggle its interactability to on
 			CurrentlyHighlightedInteractable = Cast<IInteractable>(InteractionCheckHitResult.GetActor());
 			CurrentlyHighlightedInteractable->SetIsInteractable(true);
+
+			// Set the name of the interactable for HUD display
 			HighlightedInteractableName = CurrentlyHighlightedInteractable->GetInteractableDisplayName();
+			// Ensure the previous interactable is cycled
 			PreviouslyHighlightedInteractable = CurrentlyHighlightedInteractable;
-        }
-		else if(CurrentlyHighlightedInteractable != nullptr)
+        } 
+		else if(CurrentlyHighlightedInteractable)
 		{
+			// If we are no longer looking at an interactable item, toggle interactability and clear HUD name
 			CurrentlyHighlightedInteractable->SetIsInteractable(false);
 			HighlightedInteractableName = "";
 		}		
 	}
 	else if(CurrentlyHighlightedInteractable)
 	{
+		// If we are no longer looking at an interactable item, toggle interactability and clear HUD name
 		CurrentlyHighlightedInteractable->SetIsInteractable(false);
 		HighlightedInteractableName = "";
 	}
@@ -109,7 +118,10 @@ void UInteractionComponent::InteractSphereOverlap(UPrimitiveComponent* Overlappe
 		IInteractable* PossibleInteractable = Cast<IInteractable>(OtherActor);
 		if(PossibleInteractable)
 		{
+			// When overlapping with anything that implements the Interactable interface, begin interactiong check
 			bShouldDoInteractionCheck=true;
+
+			// Keep track of number of currently overlapped interactables
 			NumberOfOverlappedInteractables += 1;
 		}
 	}
@@ -123,9 +135,11 @@ void UInteractionComponent::InteractSphereEndOverlap(UPrimitiveComponent* Overla
 		IInteractable* PossibleInteractable = Cast<IInteractable>(OtherActor);
 		if(PossibleInteractable)
 		{
+			// Keep track of number of currently overlapped interactables
 			NumberOfOverlappedInteractables -=1;
 			if(NumberOfOverlappedInteractables <=0)
 			{
+				// Only stop interaction check if overlapping no more interactables
 				bShouldDoInteractionCheck = false;
 			}
 		}

@@ -15,10 +15,6 @@ ANonPlayerCharacter::ANonPlayerCharacter()
 
 	InteractWithWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("InteractWithWidget"));
 	InteractWithWidget->SetupAttachment(RootComponent);
-
-
-	
-	
 }
 
 // Called when the game starts or when spawned
@@ -34,6 +30,7 @@ void ANonPlayerCharacter::BeginPlay()
 
 void ANonPlayerCharacter::InteractWith()
 {
+	// When interacted with, AI controller runs Dialogue tree.
 	ExampleAIController->StartDialogueTree();
 }
 
@@ -44,6 +41,7 @@ bool ANonPlayerCharacter::GetIsInteractable()
 
 void ANonPlayerCharacter::SetIsInteractable(bool bSetIsInteractableTo)
 {
+	// If this NPC is currently being looked at, display the visibility of the InteractWith Widget, otherwise hide it
 	IInteractable::SetIsInteractable(bSetIsInteractableTo);
 	if(bIsInteractable)
 	{
