@@ -28,10 +28,12 @@ public:
 
 	UBehaviorTree* GetCurrentBehaviorTree() const {return CurrentBehaviorTree;}
 	UBehaviorTree* GetNotInterestedBehaviorTree() const {return NotInterestedBehaviorTree;}
+	UBehaviorTree* GetPatrollingBehaviorTree() const {return PatrollingBehaviorTree;}
 	UBehaviorTree* GetSearchingForPlayerBehaviorTree() const {return CurrentBehaviorTree;}
 	UBehaviorTree* GetDialogueBehaviorTree() const {return DialogueTree;}
 	UBehaviorTree* GetFleeingPlayerBehaviorTree() const {return FleeingBehaviorTree;}
 	UBehaviorTree* GetEngagingPlayerBehaviorTree() const {return EngagingBehaviorTree;}
+	UBehaviorTree* GetTransitioningBehaviorTree() const {return TransitioningBehaviorTree;}
 
 	
 protected:
@@ -43,24 +45,36 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess="true"))
 	TObjectPtr<class UAIPerceptionComponent> MyPerceptionComponent;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="true"))
-	TObjectPtr<class UBehaviorTree> DialogueTree;
-
+	// This is the Current (also default) behavior tree that the AI controller is running. 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="true"))
 	TObjectPtr<class UBehaviorTree> CurrentBehaviorTree;
 
+	// Can be used as a transition between other behavior trees 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="true"))
+	TObjectPtr<class UBehaviorTree> TransitioningBehaviorTree;
+
+
+	// To be used when NPC is patrolling
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="true"))
+	TObjectPtr<class UBehaviorTree> PatrollingBehaviorTree;
+	
+	// The Dialogue tree to be used when the player talks with this NPC ("Talking To Player" State)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="true"))
+	TObjectPtr<class UBehaviorTree> DialogueTree;
+
+	// The behavior tree to be used when the NPC is in "Not Interested" state
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="true"))
 	TObjectPtr<class UBehaviorTree> NotInterestedBehaviorTree;
 
+	// Behavior tree to be used when NPC is for searching for the player
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="true"))
 	TObjectPtr<class UBehaviorTree> SearchingForPlayerBehaviorTree;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="true"))
-	TObjectPtr<class UBehaviorTree> BehaviorTree;
-
+	// Behavior tree to be used when NPC is engaging/attacking the player
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="true"))
 	TObjectPtr<class UBehaviorTree> EngagingBehaviorTree;
 
+	// Behavior tree to be used when NPC is fleeing from the player
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess="true"))
 	TObjectPtr<class UBehaviorTree> FleeingBehaviorTree;
 

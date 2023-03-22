@@ -22,7 +22,6 @@ AExampleAIController::AExampleAIController()
 void AExampleAIController::StartDialogueTree()
 {
 	RunBehaviorTree(DialogueTree);
-
 }
 
 void AExampleAIController::EndDialogue()

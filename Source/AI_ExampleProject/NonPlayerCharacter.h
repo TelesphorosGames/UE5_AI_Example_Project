@@ -12,11 +12,13 @@ UENUM(BlueprintType)
 enum class EInterestState : uint8
 {
 	EIS_NotInterested UMETA(DisplayName="Not Interested"),
+	EIS_Transitioning UMETA(DisplayName="In Transition"),
+	EIS_Patrolling UMETA(DisplayName="Patrolling"),
 	EIS_SearchingForPlayer UMETA(DisplayName="Searching For Player"),
 	EIS_TalkingWithPlayer UMETA(DisplayName="Talking With Player"),
 	EIS_EngagingPlayer UMETA(DisplayName="Engaging To Attack Player"),
 	EIS_FleeingPlayer UMETA(DisplayName="Fleeing From Player"),
-
+	
 	EIS_MAX UMETA(DisplayName="DefaultMAX")
 	
 };

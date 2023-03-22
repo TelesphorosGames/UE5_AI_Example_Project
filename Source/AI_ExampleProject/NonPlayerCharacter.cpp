@@ -98,9 +98,23 @@ void ANonPlayerCharacter::SetInterestState(const EInterestState StateToSet)
 
 		ExampleAIController->SetCurrentBehaviorTree(ExampleAIController->GetFleeingPlayerBehaviorTree());
 		break;
-		
-	case EInterestState::EIS_MAX:
+
+	case EInterestState::EIS_Transitioning:
+
+		ExampleAIController->SetCurrentBehaviorTree(ExampleAIController->GetTransitioningBehaviorTree());
 		break;
+	case EInterestState::EIS_Patrolling:
+
+		ExampleAIController->SetCurrentBehaviorTree(ExampleAIController->GetPatrollingBehaviorTree());
+		break;
+	
+	case EInterestState::EIS_MAX:
+
+
+		
+		break;
+
+		
 	default: ;
 	}
 }
